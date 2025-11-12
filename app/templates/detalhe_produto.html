@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ produto.nome }} - Detalhes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+        }
+
+        .header {
+            background: #16a34a;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .product-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .product-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .product-image-section {
+            position: relative;
+        }
+
+        .product-image-main {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .product-badges {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .badge {
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .badge-desconto {
+            background: #ef4444;
+            color: white;
+        }
+
+        .badge-destaque {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .badge-sem-estoque {
+            background: #6b7280;
+            color: white;
+        }
+
+        .product-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .product-category-tag {
+            color: #16a34a;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .product-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.2;
+        }
+
+        .product-description-full {
+            color: #6b7280;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .price-section {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .price-wrapper {
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .price-main {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #16a34a;
+        }
+
+        .price-original {
+            font-size: 1.25rem;
+            color: #9ca3af;
+            text-decoration: line-through;
+        }
+
+        .price-economia {
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .payment-info {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 10px;
+        }
+
+        .stock-section {
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .stock-disponivel {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .stock-baixo {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .stock-indisponivel {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #15803d;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .product-specs {
+            border-top: 2px solid #f3f4f6;
+            padding-top: 30px;
+        }
+
+        .specs-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .spec-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .spec-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .spec-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .related-products {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .related-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .related-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .related-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .related-info {
+            padding: 15px;
+        }
+
+        .related-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .related-price {
+            color: #16a34a;
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        @media (max-width: 768px) {
+            .product-main {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .product-image-main {
+                height: 350px;
+            }
+
+            .product-title {
+                font-size: 1.5rem;
+            }
+
+            .price-main {
+                font-size: 2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="{% url 'catalogo_produtos' %}" class="back-button">← Voltar</a>
+            <div class="logo">🛒 Minha Loja</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="product-detail">
+            <div class="product-main">
+                <!-- Seção de Imagem -->
+                <div class="product-image-section">
+                    {% if produto.foto %}
+                    <img src="{{ produto.foto.url }}" alt="{{ produto.nome }}" class="product-image-main">
+                    {% else %}
+                    <div class="product-image-main">📦</div>
+                    {% endif %}
+
+                    <div class="product-badges">
+                        {% if not produto.tem_estoque %}
+                        <span class="badge badge-sem-estoque">Sem Estoque</span>
+                        {% elif produto.porcentagem_desconto %}
+                        <span class="badge badge-desconto">-{{ produto.porcentagem_desconto|floatformat:0 }}%</span>
+                        {% endif %}
+                        
+                        {% if produto.em_destaque %}
+                        <span class="badge badge-destaque">⭐ Destaque</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Seção de Informações -->
+                <div class="product-info-section">
+                    <div class="product-category-tag">{{ produto.categoria.nome }}</div>
+                    <h1 class="product-title">{{ produto.nome }}</h1>
+                    <p class="product-description-full">{{ produto.descricao }}</p>
+
+                    <!-- Preço -->
+                    <div class="price-section">
+                        <div class="price-wrapper">
+                            <span class="price-main">R$ {{ produto.preco_final|floatformat:2 }}</span>
+                            {% if produto.preco_promocional %}
+                            <span class="price-original">R$ {{ produto.preco|floatformat:2 }}</span>
+                            <span class="price-economia">
+                                Economize R$ {{ produto.preco|add:"-"|add:produto.preco_final|floatformat:2 }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="payment-info">
+                            💳 Forma de pagamento: 
+                            {% if produto.forma_pagamento == 'vista' %}
+                            À Vista
+                            {% elif produto.forma_pagamento == 'parcelado' %}
+                            Parcelado
+                            {% else %}
+                            À Vista ou Parcelado
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Estoque -->
+                    <div class="stock-section {% if produto.tem_estoque %}{% if produto.estoque_baixo %}stock-baixo{% else %}stock-disponivel{% endif %}{% else %}stock-indisponivel{% endif %}">
+                        {% if produto.tem_estoque %}
+                            {% if produto.estoque_baixo %}
+                            ⚠️ Estoque baixo: apenas {{ produto.estoque }} unidades restantes
+                            {% else %}
+                            ✅ Em estoque: {{ produto.estoque }} unidades disponíveis
+                            {% endif %}
+                        {% else %}
+                        ❌ Produto indisponível no momento
+                        {% endif %}
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" {% if not produto.tem_estoque %}disabled{% endif %}>
+                            🛒 Adicionar ao Carrinho
+                        </button>
+                        <button class="btn btn-secondary">
+                            ❤️ Favoritar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Especificações -->
+            <div class="product-specs">
+                <h3 class="specs-title">📋 Especificações</h3>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Categoria</div>
+                        <div class="spec-value">{{ produto.categoria.nome }}</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Estoque Disponível</div>
+                        <div class="spec-value">{{ produto.estoque }} unidades</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Forma de Pagamento</div>
+                        <div class="spec-value">{{ produto.get_forma_pagamento_display }}</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Cadastrado em</div>
+                        <div class="spec-value">{{ produto.criado_em|date:"d/m/Y" }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produtos Relacionados -->
+        {% if produtos_relacionados %}
+        <div class="related-products">
+            <h2 class="section-title">Produtos Relacionados</h2>
+            <div class="related-grid">
+                {% for relacionado in produtos_relacionados %}
+                <a href="{% url 'detalhe_produto' relacionado.id %}" class="related-card">
+                    {% if relacionado.foto %}
+                    <img src="{{ relacionado.foto.url }}" alt="{{ relacionado.nome }}" class="related-image">
+                    {% else %}
+                    <div class="related-image">📦</div>
+                    {% endif %}
+                    <div class="related-info">
+                        <div class="related-name">{{ relacionado.nome }}</div>
+                        <div class="related-price">R$ {{ relacionado.preco_final|floatformat:2 }}</div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

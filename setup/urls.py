@@ -18,7 +18,13 @@ from django.contrib import admin
 from django.urls import path
 from app import views
 
+
 urlpatterns = [
-    path("", views.cadastrar_usuario, name="cadastrar_usuario"),
-    path("usuarios/", views.lista_usuarios, name="lista_usuarios"),
+    # URLs de Usuários
+    path('', views.cadastrar_usuario, name='cadastrar_usuario'),
+    path('usuarios/', views.lista_usuarios, name='lista_usuarios'),
+    
+    # URLs de Produtos
+    path('catalogo/', views.catalogo_produtos, name='catalogo_produtos'),
+    path('produto/<int:produto_id>/', views.detalhe_produto, name='detalhe_produto'),
 ]

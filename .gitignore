@@ -1,0 +1,42 @@
+# Ambientes Virtuais
+venv/
+env/
+
+# Arquivos de ambiente
+.env
+*.env
+
+# Cache de compilação Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Banco de dados
+db.sqlite3
+*.sqlite3
+db.sqlite
+*.sqlite
+
+# Arquivos de mídia e estáticos
+media/
+static/
+
+# Arquivos de configuração e logs da IDE
+.vscode/
+.idea/
+logs/
+*.log
+*.bak
+
+# Arquivos de teste e cobertura
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Arquivos de dependência (exceto `requirements.txt`)
+*.egg-info/
+
+# Arquivos de pacotes
+dist/
+build/
