@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from app import views
 
 
@@ -28,3 +30,7 @@ urlpatterns = [
     path('catalogo/', views.catalogo_produtos, name='catalogo_produtos'),
     path('produto/<int:produto_id>/', views.detalhe_produto, name='detalhe_produto'),
 ]
+
+# Servir arquivos de mídia durante desenvolvimento
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
