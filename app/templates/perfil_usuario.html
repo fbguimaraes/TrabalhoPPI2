@@ -1,0 +1,510 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Minha Loja</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+        }
+
+        /* Header */
+        .header {
+            background: #16a34a;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            color: #111827;
+        }
+
+        .profile-info p {
+            color: #6b7280;
+            margin-bottom: 3px;
+        }
+
+        .profile-info .email {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        .profile-info .tipo {
+            background: #dcfce7;
+            color: #166534;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Seções de Informação */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #16a34a;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            border-left: 4px solid #16a34a;
+            padding-left: 15px;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .info-value.empty {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        /* Botões */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #16a34a;
+            border: 2px solid #16a34a;
+        }
+
+        .btn-secondary:hover {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+
+            .profile-info h1 {
+                font-size: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .no-data {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="{% url 'catalogo_produtos' %}" class="logo">🛒 Minha Loja</a>
+            <div class="nav-links">
+                <a href="{% url 'catalogo_produtos' %}" class="nav-link">📦 Catálogo</a>
+                <a href="{% url 'logout_usuario' %}" class="nav-link">🚪 Sair</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <!-- Header do Perfil -->
+        <div class="profile-header">
+            <div class="profile-avatar">👤</div>
+            <div class="profile-info">
+                <h1>
+                    {% if dados_adicionais %}
+                        {% if tipo_cliente == 'pf' %}
+                            {{ dados_adicionais.nome }}
+                        {% else %}
+                            {{ dados_adicionais.razao_social }}
+                        {% endif %}
+                    {% else %}
+                        {{ usuario.username }}
+                    {% endif %}
+                </h1>
+                <p><strong>Email:</strong></p>
+                <p class="email">{{ usuario.email }}</p>
+                <span class="tipo">
+                    {% if tipo_cliente == 'pf' %}
+                        🧑 Pessoa Física
+                    {% else %}
+                        🏢 Pessoa Jurídica
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <!-- Informações Pessoais -->
+        {% if tipo_cliente == 'pf' and dados_adicionais %}
+        <div class="info-section">
+            <h2 class="section-title">📋 Informações Pessoais</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Nome Completo</div>
+                    <div class="info-value">{{ dados_adicionais.nome }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">CPF</div>
+                    <div class="info-value">{{ dados_adicionais.cpf }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Data de Nascimento</div>
+                    <div class="info-value">
+                        {{ dados_adicionais.data_nascimento|date:"d/m/Y" }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">RG</div>
+                    <div class="info-value">
+                        {{ dados_adicionais.rg|default:"Não informado" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informações de Contato -->
+        <div class="info-section">
+            <h2 class="section-title">📞 Contato</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Telefone Principal</div>
+                    <div class="info-value">{{ dados_adicionais.telefone_principal }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Telefone Secundário</div>
+                    <div class="info-value">
+                        {{ dados_adicionais.telefone_secundario|default:"Não informado" }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{{ dados_adicionais.email }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endereço -->
+        <div class="info-section">
+            <h2 class="section-title">📍 Endereço</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">CEP</div>
+                    <div class="info-value">{{ dados_adicionais.cep }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Logradouro</div>
+                    <div class="info-value">{{ dados_adicionais.logradouro }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Número</div>
+                    <div class="info-value">{{ dados_adicionais.numero }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Complemento</div>
+                    <div class="info-value">
+                        {{ dados_adicionais.complemento|default:"Sem complemento" }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Bairro</div>
+                    <div class="info-value">{{ dados_adicionais.bairro }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Cidade</div>
+                    <div class="info-value">{{ dados_adicionais.cidade }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Estado</div>
+                    <div class="info-value">{{ dados_adicionais.estado }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">País</div>
+                    <div class="info-value">{{ dados_adicionais.pais }}</div>
+                </div>
+            </div>
+        </div>
+
+        {% elif tipo_cliente == 'pj' and dados_adicionais %}
+        <!-- Informações Jurídicas -->
+        <div class="info-section">
+            <h2 class="section-title">🏢 Informações da Empresa</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Razão Social</div>
+                    <div class="info-value">{{ dados_adicionais.razao_social }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Nome Fantasia</div>
+                    <div class="info-value">
+                        {{ dados_adicionais.nome_fantasia|default:"Não informado" }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">CNPJ</div>
+                    <div class="info-value">{{ dados_adicionais.cnpj }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Inscrição Estadual</div>
+                    <div class="info-value">
+                        {{ dados_adicionais.inscricao_estadual|default:"Não informada" }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Data de Abertura</div>
+                    <div class="info-value">{{ dados_adicionais.data_abertura|date:"d/m/Y" }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Site</div>
+                    <div class="info-value">
+                        {% if dados_adicionais.site %}
+                            <a href="{{ dados_adicionais.site }}" target="_blank" style="color: #16a34a;">{{ dados_adicionais.site }}</a>
+                        {% else %}
+                            Não informado
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informações de Contato (PJ) -->
+        <div class="info-section">
+            <h2 class="section-title">📞 Contato</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Telefone Principal</div>
+                    <div class="info-value">{{ dados_adicionais.telefone_principal }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Telefone Secundário</div>
+                    <div class="info-value">
+                        {{ dados_adicionais.telefone_secundario|default:"Não informado" }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{{ dados_adicionais.email }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endereço (PJ) -->
+        <div class="info-section">
+            <h2 class="section-title">📍 Endereço</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">CEP</div>
+                    <div class="info-value">{{ dados_adicionais.cep }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Logradouro</div>
+                    <div class="info-value">{{ dados_adicionais.logradouro }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Número</div>
+                    <div class="info-value">{{ dados_adicionais.numero }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Complemento</div>
+                    <div class="info-value">
+                        {{ dados_adicionais.complemento|default:"Sem complemento" }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Bairro</div>
+                    <div class="info-value">{{ dados_adicionais.bairro }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Cidade</div>
+                    <div class="info-value">{{ dados_adicionais.cidade }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Estado</div>
+                    <div class="info-value">{{ dados_adicionais.estado }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">País</div>
+                    <div class="info-value">{{ dados_adicionais.pais }}</div>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <div class="no-data">
+            ⚠️ Dados de perfil não encontrados. Seus dados serão preenchidos quando você completar o registro.
+        </div>
+        {% endif %}
+
+        <!-- Botões de Ação -->
+        <div class="button-group">
+            <a href="{% url 'catalogo_produtos' %}" class="btn btn-secondary">← Voltar ao Catálogo</a>
+            <a href="{% url 'logout_usuario' %}" class="btn btn-danger">Fazer Logout</a>
+        </div>
+    </div>
+</body>
+</html>

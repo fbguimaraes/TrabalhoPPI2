@@ -1,9 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Produtos</title>
+    <title>Catálogo de Produtos - Minha Loja</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
         * {
             margin: 0;
@@ -38,6 +40,19 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
         }
 
         .search-box {
@@ -401,6 +416,10 @@
                 <input type="text" name="busca" placeholder="Buscar produtos..." value="{{ busca }}">
                 <button type="submit">🔍</button>
             </form>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="{% url 'perfil_usuario' %}" class="nav-link" title="Meu Perfil">👤 {{ user.email }}</a>
+                <a href="{% url 'logout_usuario' %}" class="nav-link">🚪 Sair</a>
+            </div>
         </div>
     </header>
 
@@ -420,7 +439,7 @@
                 <li class="category-item">
                     <a href="?categoria={{ categoria.id }}" class="category-link {% if categoria_selecionada.id == categoria.id %}active{% endif %}">
                         <span>{{ categoria.nome }}</span>
-                        <span class="category-count">{{ categoria.produtos_em_estoque }}</span>
+                        <span class="category-count">{{ categoria.em_estoque }}</span>
                     </a>
                 </li>
                 {% endfor %}

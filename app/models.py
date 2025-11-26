@@ -69,7 +69,7 @@ class PessoaJuridica(models.Model):
 class Categoria(models.Model):
     nome = models.CharField(max_length=100, unique=True)
     descricao = models.TextField(blank=True, null=True)
-    ativa = models.BooleanField(default=True)
+    ativa = models.BooleanField(default=True, db_index=True)
     ordem = models.IntegerField(default=0)  # Para ordenar as categorias
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
@@ -96,17 +96,17 @@ class Produto(models.Model):
         ('ambos', 'Ambos'),
     )
 
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name='produtos')
-    nome = models.CharField(max_length=200)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name='produtos', db_index=True)
+    nome = models.CharField(max_length=200, db_index=True)
     descricao = models.TextField()
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     preco_promocional = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     estoque = models.IntegerField(default=0)
     estoque_minimo = models.IntegerField(default=5)
     foto = models.ImageField(upload_to='produtos/', blank=True, null=True)
-    em_destaque = models.BooleanField(default=False)
+    em_destaque = models.BooleanField(default=False, db_index=True)
     forma_pagamento = models.CharField(max_length=10, choices=FORMA_PAGAMENTO, default='ambos')
-    ativo = models.BooleanField(default=True)
+    ativo = models.BooleanField(default=True, db_index=True)
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
@@ -152,3 +152,74 @@ class ImagemProduto(models.Model):
 
     def __str__(self):
         return f"Imagem {self.ordem} - {self.produto.nome}"
+
+
+# ==========================
+# MODELOS DE CARRINHO
+# ==========================
+
+class Carrinho(models.Model):
+    """Carrinho de compras do usuário"""
+    cliente = models.OneToOneField(Cliente, on_delete=models.CASCADE, related_name='carrinho')
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Carrinho'
+        verbose_name_plural = 'Carrinhos'
+
+    def __str__(self):
+        return f"Carrinho de {self.cliente.email}"
+
+    def total_itens(self):
+        """Total de itens no carrinho (quantidade)"""
+        return sum(item.quantidade for item in self.itens.all())
+
+    def total_preco(self):
+        """Preço total do carrinho"""
+        return sum(item.subtotal() for item in self.itens.all())
+
+    def quantidade_produtos(self):
+        """Quantidade de produtos diferentes"""
+        return self.itens.count()
+
+    def limpar(self):
+        """Limpa o carrinho removendo todos os itens"""
+        self.itens.all().delete()
+
+    def esta_vazio(self):
+        """Verifica se o carrinho está vazio"""
+        return not self.itens.exists()
+
+
+class ItemCarrinho(models.Model):
+    """Item individual no carrinho"""
+    carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE, related_name='itens')
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    quantidade = models.IntegerField(default=1, blank=False)
+    preco_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ['carrinho', 'produto']
+        verbose_name = 'Item do Carrinho'
+        verbose_name_plural = 'Itens do Carrinho'
+
+    def __str__(self):
+        return f"{self.produto.nome} (x{self.quantidade})"
+
+    def subtotal(self):
+        """Subtotal deste item"""
+        return self.preco_unitario * self.quantidade
+
+    def salvar_quantidade(self, nova_quantidade):
+        """Atualiza a quantidade do item"""
+        if nova_quantidade <= 0:
+            self.delete()
+        else:
+            # Validar estoque
+            if nova_quantidade > self.produto.estoque:
+                raise ValueError(f"Quantidade indisponível. Estoque: {self.produto.estoque}")
+            self.quantidade = nova_quantidade
+            self.save()

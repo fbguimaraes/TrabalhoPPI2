@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Minha Loja</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    body {
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-lg);
+    }
+
+    .login-container {
+      background: var(--bg-white);
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 400px;
+      padding: var(--spacing-2xl);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .login-logo {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .login-header h1 {
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--text-dark);
+    }
+
+    .login-header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .login-form {
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .form-group {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+      margin: var(--spacing-2xl) 0;
+      color: var(--text-light);
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-light);
+    }
+
+    .login-footer {
+      text-align: center;
+    }
+
+    .login-footer p {
+      margin: 0 0 var(--spacing-md) 0;
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .signup-btn {
+      background: var(--bg-lighter);
+      color: var(--primary-green);
+      border: 2px solid var(--primary-green);
+      padding: var(--spacing-md) var(--spacing-xl);
+      border-radius: var(--rounded-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .signup-btn:hover {
+      background: var(--primary-green);
+      color: var(--bg-white);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">🛒</div>
+      <h1>Minha Loja</h1>
+      <p>Acesse sua conta para continuar</p>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="message {% if message.tags == 'error' %}error{% else %}success{% endif %}">
+        {% if message.tags == 'error' %}❌{% else %}✓{% endif %} {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" class="login-form">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="email" class="required">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="seu@email.com"
+          value="{{ email }}"
+          required
+          autofocus
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="senha" class="required">Senha</label>
+        <input 
+          type="password" 
+          id="senha" 
+          name="senha" 
+          placeholder="Sua senha"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+    </form>
+
+    <div class="login-divider">Novo por aqui?</div>
+
+    <div class="login-footer">
+      <a href="{% url 'cadastro_usuario' %}" class="signup-btn">Criar Conta</a>
+    </div>
+  </div>
+</body>
+</html>

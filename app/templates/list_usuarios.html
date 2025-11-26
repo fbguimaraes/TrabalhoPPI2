@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Usuários</title>
+    <title>Lista de Usuários - Minha Loja</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
         body {
             font-family: "Inter", sans-serif;
@@ -133,35 +134,37 @@
                 </tr>
             </thead>
             <tbody>
-                {% for usuario in usuarios %}
+                {% for pf in usuarios_pf %}
                 <tr>
-                    <td data-label="Tipo">{{ usuario.tipo_cliente }}</td>
-                    <td data-label="CPF/CNPJ">
-                        {% if usuario.cliente.tipo_cliente == "pf" %}
-                        {{ usuario.cpf }}
-                        {% else %}
-                        {{ usuario.cnpj }}
-                        {% endif %}
-                    </td>
-                    <td data-label="Nome/Razão Social">
-                        {% if usuario.cliente.tipo_cliente == "pf" %}
-                        {{ usuario.nome }}
-                        {% else %}
-                        {{ usuario.razao_social }}
-                        {% endif %}
-                    </td>
-                    <td data-label="Nome Fantasia">{{ usuario.nome_fantasia|default:"-" }}</td>
-                    <td data-label="Email">{{ usuario.email }}</td>
-                    <td data-label="Telefone">{{ usuario.telefone_principal }}</td>
-                    <td data-label="Cidade">{{ usuario.cidade }}</td>
-                    <td data-label="Estado">{{ usuario.estado }}</td>
-                    <td data-label="País">{{ usuario.pais }}</td>
+                    <td data-label="Tipo">Pessoa Física</td>
+                    <td data-label="CPF/CNPJ">{{ pf.cpf }}</td>
+                    <td data-label="Nome/Razão Social">{{ pf.nome }}</td>
+                    <td data-label="Nome Fantasia">-</td>
+                    <td data-label="Email">{{ pf.email }}</td>
+                    <td data-label="Telefone">{{ pf.telefone_principal }}</td>
+                    <td data-label="Cidade">{{ pf.cidade }}</td>
+                    <td data-label="Estado">{{ pf.estado }}</td>
+                    <td data-label="País">{{ pf.pais }}</td>
                 </tr>
-                {% empty %}
+                {% endfor %}
+                {% for pj in usuarios_pj %}
+                <tr>
+                    <td data-label="Tipo">Pessoa Jurídica</td>
+                    <td data-label="CPF/CNPJ">{{ pj.cnpj }}</td>
+                    <td data-label="Nome/Razão Social">{{ pj.razao_social }}</td>
+                    <td data-label="Nome Fantasia">{{ pj.nome_fantasia|default:"-" }}</td>
+                    <td data-label="Email">{{ pj.email }}</td>
+                    <td data-label="Telefone">{{ pj.telefone_principal }}</td>
+                    <td data-label="Cidade">{{ pj.cidade }}</td>
+                    <td data-label="Estado">{{ pj.estado }}</td>
+                    <td data-label="País">{{ pj.pais }}</td>
+                </tr>
+                {% endfor %}
+                {% if not usuarios_pf and not usuarios_pj %}
                 <tr>
                     <td colspan="9" style="text-align:center;">Nenhum usuário cadastrado ainda.</td>
                 </tr>
-                {% endfor %}
+                {% endif %}
             </tbody>
         </table>
 

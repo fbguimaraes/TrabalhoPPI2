@@ -23,12 +23,26 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.cadastrar_usuario, name='cadastrar_usuario'),
+    
+    # Autenticação
+    path('', views.login_usuario, name='login_usuario'),
+    path('logout/', views.logout_usuario, name='logout_usuario'),
+    path('cadastro/', views.cadastro_usuario, name='cadastro_usuario'),
+    path('perfil/', views.perfil_usuario, name='perfil_usuario'),
+    
+    # Usuários
     path('usuarios/', views.lista_usuarios, name='lista_usuarios'),
     
-    # URLs de Produtos
+    # Produtos
     path('catalogo/', views.catalogo_produtos, name='catalogo_produtos'),
     path('produto/<int:produto_id>/', views.detalhe_produto, name='detalhe_produto'),
+    
+    # Carrinho
+    path('carrinho/', views.ver_carrinho, name='ver_carrinho'),
+    path('carrinho/adicionar/<int:produto_id>/', views.adicionar_carrinho, name='adicionar_carrinho'),
+    path('carrinho/atualizar/<int:item_id>/', views.atualizar_item_carrinho, name='atualizar_item_carrinho'),
+    path('carrinho/remover/<int:item_id>/', views.remover_item_carrinho, name='remover_item_carrinho'),
+    path('carrinho/limpar/', views.limpar_carrinho, name='limpar_carrinho'),
 ]
 
 # Servir arquivos de mídia durante desenvolvimento
