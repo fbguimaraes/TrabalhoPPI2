@@ -8,36 +8,40 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <style>
     body {
-      background: var(--bg-lighter);
-      padding: var(--spacing-lg);
+      background: #f8fafc;
+      margin: 0;
+      padding: 40px;
+      color: #111;
     }
 
     .registration-container {
-      max-width: 600px;
+      max-width: 500px;
       margin: 0 auto;
     }
 
     .registration-header {
       text-align: center;
-      margin-bottom: var(--spacing-2xl);
+      margin-bottom: 30px;
     }
 
     .registration-header h2 {
-      margin: 0 0 var(--spacing-sm) 0;
+      margin: 0 0 10px 0;
+      font-size: 2rem;
     }
 
     .registration-header p {
-      margin: 0 0 var(--spacing-xl) 0;
-      color: var(--text-muted);
+      margin: 0;
+      color: #6b7280;
+      font-size: 0.95rem;
     }
 
     .back-link {
       text-align: center;
-      margin-bottom: var(--spacing-lg);
+      margin-bottom: 20px;
     }
 
     .back-link a {
-      color: var(--primary-green);
+      color: #16a34a;
       text-decoration: none;
       font-weight: 600;
     }
@@ -46,41 +50,63 @@
       text-decoration: underline;
     }
 
+    .messages {
+      margin-bottom: 20px;
+    }
+
+    .message {
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+
+    .message.error {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+
+    .message.success {
+      background-color: #dcfce7;
+      border-color: #16a34a;
+      color: #166534;
+    }
+
     .tabs {
       display: flex;
-      background: var(--border-light);
-      border-radius: var(--rounded-md);
+      background: #e2e8f0;
+      border-radius: 10px;
       overflow: hidden;
-      margin-bottom: var(--spacing-2xl);
-      box-shadow: var(--shadow-sm);
+      margin-bottom: 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .tab-btn {
       flex: 1;
-      padding: var(--spacing-md) var(--spacing-lg);
+      padding: 12px;
       background: transparent;
       border: none;
       cursor: pointer;
       font-weight: 600;
-      font-size: var(--font-size-sm);
-      color: var(--text-muted);
-      transition: all var(--transition-base);
+      transition: all 0.2s;
+      color: #6b7280;
+    }
+
+    .tab-btn.active {
+      background: #16a34a;
+      color: white;
     }
 
     .tab-btn:hover {
       background: rgba(22, 163, 74, 0.1);
     }
 
-    .tab-btn.active {
-      background: var(--primary-green);
-      color: var(--bg-white);
-    }
-
     .form-box {
-      background: var(--bg-white);
-      padding: var(--spacing-2xl);
-      border-radius: var(--rounded-lg);
-      box-shadow: var(--shadow-sm);
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       display: none;
       max-height: 80vh;
       overflow-y: auto;
@@ -88,7 +114,7 @@
 
     .form-box.active {
       display: block;
-      animation: slideUp var(--transition-base);
+      animation: slideUp 0.3s ease-out;
     }
 
     @keyframes slideUp {
@@ -102,91 +128,135 @@
       }
     }
 
-    .form-section-title {
-      font-size: var(--font-size-lg);
-      font-weight: 700;
-      color: var(--text-dark);
-      margin: var(--spacing-xl) 0 var(--spacing-lg) 0;
-      padding-bottom: var(--spacing-md);
-      border-bottom: 2px solid var(--border-light);
+    .form-section {
+      margin-bottom: 20px;
     }
 
-    .form-section-title:first-child {
+    .form-section-title {
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+
+    .form-section:first-child .form-section-title {
       margin-top: 0;
     }
 
-    input[type="text"].valid,
-    input[type="email"].valid,
-    input[type="password"].valid,
-    input[type="date"].valid,
-    input[type="tel"].valid,
-    input[type="url"].valid {
-      border-color: var(--success-border);
-      background: var(--success-bg);
+    .form-group {
+      margin-bottom: 15px;
     }
 
-    input[type="text"].invalid,
-    input[type="email"].invalid,
-    input[type="password"].invalid,
-    input[type="date"].invalid,
-    input[type="tel"].invalid,
-    input[type="url"].invalid {
-      border-color: var(--error-border);
-      background: var(--error-bg);
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #374151;
+    }
+
+    label.required::after {
+      content: ' *';
+      color: #ef4444;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      border-color: #16a34a;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+    }
+
+    input.valid {
+      border-color: #16a34a;
+      background-color: #f0fdf4;
+    }
+
+    input.invalid {
+      border-color: #ef4444;
+      background-color: #fef2f2;
     }
 
     .form-note {
-      font-size: var(--font-size-xs);
-      color: var(--text-light);
-      margin-top: var(--spacing-xs);
+      font-size: 0.8em;
+      color: #6b7280;
+      margin-top: 3px;
       display: block;
     }
 
-    .form-error {
-      color: var(--error-border);
-      font-size: var(--font-size-xs);
-      margin-top: var(--spacing-xs);
+    .error-message {
+      color: #ef4444;
+      font-size: 0.8em;
+      margin-top: 3px;
       display: none;
     }
 
-    .form-error.show {
+    .error-message.show {
       display: block;
     }
 
-    .form-success {
-      color: var(--success-border);
-      font-size: var(--font-size-xs);
-      margin-top: var(--spacing-xs);
+    .success-message {
+      color: #16a34a;
+      font-size: 0.8em;
+      margin-top: 3px;
       display: none;
     }
 
-    .form-success.show {
+    .success-message.show {
       display: block;
     }
 
-    .form-loading {
-      color: var(--primary-green);
-      font-size: var(--font-size-xs);
-      margin-top: var(--spacing-xs);
+    .loading-message {
+      color: #16a34a;
+      font-size: 0.8em;
+      margin-top: 3px;
       display: none;
     }
 
-    .form-loading.show {
+    .loading-message.show {
       display: block;
     }
 
     button[type="submit"] {
       width: 100%;
-      margin-top: var(--spacing-xl);
+      padding: 12px 20px;
+      background-color: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #15803d;
     }
 
     @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
       .registration-container {
         max-width: 100%;
       }
 
       .form-box {
-        padding: var(--spacing-lg);
+        padding: 20px;
       }
 
       .tabs {
@@ -194,7 +264,7 @@
       }
 
       .tab-btn {
-        padding: var(--spacing-md) var(--spacing-md);
+        padding: 10px;
       }
     }
   </style>
@@ -234,116 +304,112 @@
       {% csrf_token %}
       <input type="hidden" name="tipo_cliente" value="PF">
 
-      <div class="form-section-title">Credenciais de Acesso</div>
+      <div class="form-section">
+        <div class="form-section-title">Credenciais de Acesso</div>
 
-      <div class="form-group">
-        <label for="emailFisica" class="required">Email</label>
-        <input type="email" id="emailFisica" name="email" placeholder="seu@email.com" value="{{ form_data.email }}" required>
-        <span class="form-error" id="emailFisicaError"></span>
-        <span class="form-success" id="emailFisicaSuccess">✓ Email válido</span>
+        <div class="form-group">
+          <label for="emailFisica" class="required">Email</label>
+          <input type="email" id="emailFisica" name="email" placeholder="seu@email.com" value="{{ form_data.email }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="senhaFisica" class="required">Senha</label>
+          <input type="password" id="senhaFisica" name="senha" placeholder="Mínimo 6 caracteres" required>
+          <span class="form-note">Mínimo 6 caracteres</span>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmarSenhaFisica" class="required">Confirmar Senha</label>
+          <input type="password" id="confirmarSenhaFisica" name="confirmar_senha" placeholder="Confirme sua senha" required>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="senhaFisica" class="required">Senha</label>
-        <input type="password" id="senhaFisica" name="senha" placeholder="Mínimo 6 caracteres" required>
-        <span class="form-note">Mínimo 6 caracteres</span>
-        <span class="form-error" id="senhaFisicaError"></span>
+      <div class="form-section">
+        <div class="form-section-title">Dados Pessoais</div>
+
+        <div class="form-group">
+          <label for="cpfFisica" class="required">CPF</label>
+          <input type="text" id="cpfFisica" name="cpf" maxlength="14" placeholder="000.000.000-00" value="{{ form_data.cpf }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="nomeFisica" class="required">Nome Completo</label>
+          <input type="text" id="nomeFisica" name="nome" maxlength="150" placeholder="Digite seu nome completo" value="{{ form_data.nome }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="dataNascimentoFisica" class="required">Data de Nascimento</label>
+          <input type="date" id="dataNascimentoFisica" name="data_nascimento" value="{{ form_data.data_nascimento }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="rgFisica">RG</label>
+          <input type="text" id="rgFisica" name="rg" maxlength="20" placeholder="(opcional)" value="{{ form_data.rg }}">
+          <span class="form-note">Campo opcional</span>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="confirmarSenhaFisica" class="required">Confirmar Senha</label>
-        <input type="password" id="confirmarSenhaFisica" name="confirmar_senha" placeholder="Confirme sua senha" required>
-        <span class="form-error" id="confirmarSenhaFisicaError"></span>
+      <div class="form-section">
+        <div class="form-section-title">Contato</div>
+
+        <div class="form-group">
+          <label for="telefonePrincipalFisica" class="required">Telefone Principal</label>
+          <input type="tel" id="telefonePrincipalFisica" name="telefone_principal" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_principal }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefoneSecundarioFisica">Telefone Secundário</label>
+          <input type="tel" id="telefoneSecundarioFisica" name="telefone_secundario" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_secundario }}">
+          <span class="form-note">Campo opcional</span>
+        </div>
       </div>
 
-      <div class="form-section-title">Dados Pessoais</div>
+      <div class="form-section">
+        <div class="form-section-title">Endereço</div>
 
-      <div class="form-group">
-        <label for="cpfFisica" class="required">CPF</label>
-        <input type="text" id="cpfFisica" name="cpf" maxlength="14" placeholder="000.000.000-00" value="{{ form_data.cpf }}" required>
-        <span class="form-error" id="cpfFisicaError"></span>
-        <span class="form-success" id="cpfFisicaSuccess">✓ CPF válido</span>
+        <div class="form-group">
+          <label for="cepFisica" class="required">CEP</label>
+          <input type="text" id="cepFisica" name="cep" maxlength="9" placeholder="00000-000" value="{{ form_data.cep }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="logradouroFisica" class="required">Logradouro</label>
+          <input type="text" id="logradouroFisica" name="logradouro" maxlength="150" value="{{ form_data.logradouro }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="numeroFisica" class="required">Número</label>
+          <input type="text" id="numeroFisica" name="numero" maxlength="10" value="{{ form_data.numero }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="complementoFisica">Complemento</label>
+          <input type="text" id="complementoFisica" name="complemento" maxlength="50" placeholder="Apto, Sala, etc" value="{{ form_data.complemento }}">
+          <span class="form-note">Campo opcional</span>
+        </div>
+
+        <div class="form-group">
+          <label for="bairroFisica" class="required">Bairro</label>
+          <input type="text" id="bairroFisica" name="bairro" maxlength="80" value="{{ form_data.bairro }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cidadeFisica" class="required">Cidade</label>
+          <input type="text" id="cidadeFisica" name="cidade" maxlength="100" value="{{ form_data.cidade }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="estadoFisica" class="required">Estado</label>
+          <input type="text" id="estadoFisica" name="estado" maxlength="2" placeholder="SP" value="{{ form_data.estado }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="paisFisica" class="required">País</label>
+          <input type="text" id="paisFisica" name="pais" maxlength="50" value="{{ form_data.pais|default:'Brasil' }}" required>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="nomeFisica" class="required">Nome Completo</label>
-        <input type="text" id="nomeFisica" name="nome" maxlength="150" placeholder="Digite seu nome completo" value="{{ form_data.nome }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="dataNascimentoFisica" class="required">Data de Nascimento</label>
-        <input type="date" id="dataNascimentoFisica" name="data_nascimento" value="{{ form_data.data_nascimento }}" required>
-        <span class="form-error" id="dataNascimentoFisicaError"></span>
-      </div>
-
-      <div class="form-group">
-        <label for="rgFisica">RG</label>
-        <input type="text" id="rgFisica" name="rg" maxlength="20" placeholder="(opcional)" value="{{ form_data.rg }}">
-        <span class="form-note">Campo opcional</span>
-      </div>
-
-      <div class="form-section-title">Contato</div>
-
-      <div class="form-group">
-        <label for="telefonePrincipalFisica" class="required">Telefone Principal</label>
-        <input type="tel" id="telefonePrincipalFisica" name="telefone_principal" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_principal }}" required>
-        <span class="form-error" id="telefonePrincipalFisicaError"></span>
-        <span class="form-success" id="telefonePrincipalFisicaSuccess">✓ Telefone válido</span>
-      </div>
-
-      <div class="form-group">
-        <label for="telefoneSecundarioFisica">Telefone Secundário</label>
-        <input type="tel" id="telefoneSecundarioFisica" name="telefone_secundario" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_secundario }}">
-        <span class="form-note">Campo opcional</span>
-      </div>
-
-      <div class="form-section-title">Endereço</div>
-
-      <div class="form-group">
-        <label for="cepFisica" class="required">CEP</label>
-        <input type="text" id="cepFisica" name="cep" maxlength="9" placeholder="00000-000" value="{{ form_data.cep }}" required>
-        <span class="form-loading" id="cepFisicaLoading">🔄 Buscando CEP...</span>
-        <span class="form-error" id="cepFisicaError"></span>
-        <span class="form-success" id="cepFisicaSuccess">✓ CEP encontrado</span>
-      </div>
-
-      <div class="form-group">
-        <label for="logradouroFisica" class="required">Logradouro</label>
-        <input type="text" id="logradouroFisica" name="logradouro" maxlength="150" value="{{ form_data.logradouro }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="numeroFisica" class="required">Número</label>
-        <input type="text" id="numeroFisica" name="numero" maxlength="10" value="{{ form_data.numero }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="complementoFisica">Complemento</label>
-        <input type="text" id="complementoFisica" name="complemento" maxlength="50" placeholder="Apto, Sala, etc" value="{{ form_data.complemento }}">
-        <span class="form-note">Campo opcional</span>
-      </div>
-
-      <div class="form-group">
-        <label for="bairroFisica" class="required">Bairro</label>
-        <input type="text" id="bairroFisica" name="bairro" maxlength="80" value="{{ form_data.bairro }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="cidadeFisica" class="required">Cidade</label>
-        <input type="text" id="cidadeFisica" name="cidade" maxlength="100" value="{{ form_data.cidade }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="estadoFisica" class="required">Estado</label>
-        <input type="text" id="estadoFisica" name="estado" maxlength="2" placeholder="SP" value="{{ form_data.estado }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="paisFisica" class="required">País</label>
-        <input type="text" id="paisFisica" name="pais" maxlength="50" value="{{ form_data.pais|default:'Brasil' }}" required>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Finalizar Cadastro</button>
+      <button type="submit">Finalizar Cadastro</button>
     </form>
 
     <!-- FORMULÁRIO PESSOA JURÍDICA -->
@@ -351,131 +417,127 @@
       {% csrf_token %}
       <input type="hidden" name="tipo_cliente" value="PJ">
 
-      <div class="form-section-title">Credenciais de Acesso</div>
+      <div class="form-section">
+        <div class="form-section-title">Credenciais de Acesso</div>
 
-      <div class="form-group">
-        <label for="emailJuridica" class="required">Email</label>
-        <input type="email" id="emailJuridica" name="email" placeholder="contato@empresa.com" value="{{ form_data.email }}" required>
-        <span class="form-error" id="emailJuridicaError"></span>
-        <span class="form-success" id="emailJuridicaSuccess">✓ Email válido</span>
+        <div class="form-group">
+          <label for="emailJuridica" class="required">Email</label>
+          <input type="email" id="emailJuridica" name="email" placeholder="contato@empresa.com" value="{{ form_data.email }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="senhaJuridica" class="required">Senha</label>
+          <input type="password" id="senhaJuridica" name="senha" placeholder="Mínimo 6 caracteres" required>
+          <span class="form-note">Mínimo 6 caracteres</span>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmarSenhaJuridica" class="required">Confirmar Senha</label>
+          <input type="password" id="confirmarSenhaJuridica" name="confirmar_senha" placeholder="Confirme sua senha" required>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="senhaJuridica" class="required">Senha</label>
-        <input type="password" id="senhaJuridica" name="senha" placeholder="Mínimo 6 caracteres" required>
-        <span class="form-note">Mínimo 6 caracteres</span>
-        <span class="form-error" id="senhaJuridicaError"></span>
+      <div class="form-section">
+        <div class="form-section-title">Dados da Empresa</div>
+
+        <div class="form-group">
+          <label for="cnpjJuridica" class="required">CNPJ</label>
+          <input type="text" id="cnpjJuridica" name="cnpj" maxlength="18" placeholder="00.000.000/0000-00" value="{{ form_data.cnpj }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="razaoSocialJuridica" class="required">Razão Social</label>
+          <input type="text" id="razaoSocialJuridica" name="razao_social" maxlength="150" value="{{ form_data.razao_social }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="nomeFantasiaJuridica">Nome de Fantasia</label>
+          <input type="text" id="nomeFantasiaJuridica" name="nome_fantasia" maxlength="150" value="{{ form_data.nome_fantasia }}">
+          <span class="form-note">Campo opcional</span>
+        </div>
+
+        <div class="form-group">
+          <label for="dataAberturaJuridica" class="required">Data de Abertura</label>
+          <input type="date" id="dataAberturaJuridica" name="data_abertura" value="{{ form_data.data_abertura }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="inscricaoEstadualJuridica">Inscrição Estadual</label>
+          <input type="text" id="inscricaoEstadualJuridica" name="inscricao_estadual" maxlength="20" value="{{ form_data.inscricao_estadual }}">
+          <span class="form-note">Campo opcional</span>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="confirmarSenhaJuridica" class="required">Confirmar Senha</label>
-        <input type="password" id="confirmarSenhaJuridica" name="confirmar_senha" placeholder="Confirme sua senha" required>
-        <span class="form-error" id="confirmarSenhaJuridicaError"></span>
+      <div class="form-section">
+        <div class="form-section-title">Contato</div>
+
+        <div class="form-group">
+          <label for="telefonePrincipalJuridica" class="required">Telefone Principal</label>
+          <input type="tel" id="telefonePrincipalJuridica" name="telefone_principal" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_principal }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefoneSecundarioJuridica">Telefone Secundário</label>
+          <input type="tel" id="telefoneSecundarioJuridica" name="telefone_secundario" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_secundario }}">
+          <span class="form-note">Campo opcional</span>
+        </div>
+
+        <div class="form-group">
+          <label for="siteJuridica">Site Institucional</label>
+          <input type="url" id="siteJuridica" name="site" placeholder="https://www.empresa.com" value="{{ form_data.site }}">
+          <span class="form-note">Campo opcional</span>
+        </div>
       </div>
 
-      <div class="form-section-title">Dados da Empresa</div>
+      <div class="form-section">
+        <div class="form-section-title">Endereço</div>
 
-      <div class="form-group">
-        <label for="cnpjJuridica" class="required">CNPJ</label>
-        <input type="text" id="cnpjJuridica" name="cnpj" maxlength="18" placeholder="00.000.000/0000-00" value="{{ form_data.cnpj }}" required>
-        <span class="form-error" id="cnpjJuridicaError"></span>
-        <span class="form-success" id="cnpjJuridicaSuccess">✓ CNPJ válido</span>
+        <div class="form-group">
+          <label for="cepJuridica" class="required">CEP</label>
+          <input type="text" id="cepJuridica" name="cep" maxlength="9" placeholder="00000-000" value="{{ form_data.cep }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="logradouroJuridica" class="required">Logradouro</label>
+          <input type="text" id="logradouroJuridica" name="logradouro" maxlength="150" value="{{ form_data.logradouro }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="numeroJuridica" class="required">Número</label>
+          <input type="text" id="numeroJuridica" name="numero" maxlength="10" value="{{ form_data.numero }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="complementoJuridica">Complemento</label>
+          <input type="text" id="complementoJuridica" name="complemento" maxlength="50" placeholder="Sala, Andar, etc" value="{{ form_data.complemento }}">
+          <span class="form-note">Campo opcional</span>
+        </div>
+
+        <div class="form-group">
+          <label for="bairroJuridica" class="required">Bairro</label>
+          <input type="text" id="bairroJuridica" name="bairro" maxlength="80" value="{{ form_data.bairro }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cidadeJuridica" class="required">Cidade</label>
+          <input type="text" id="cidadeJuridica" name="cidade" maxlength="100" value="{{ form_data.cidade }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="estadoJuridica" class="required">Estado</label>
+          <input type="text" id="estadoJuridica" name="estado" maxlength="2" placeholder="SP" value="{{ form_data.estado }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="paisJuridica" class="required">País</label>
+          <input type="text" id="paisJuridica" name="pais" maxlength="50" value="{{ form_data.pais|default:'Brasil' }}" required>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="razaoSocialJuridica" class="required">Razão Social</label>
-        <input type="text" id="razaoSocialJuridica" name="razao_social" maxlength="150" value="{{ form_data.razao_social }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="nomeFantasiaJuridica">Nome de Fantasia</label>
-        <input type="text" id="nomeFantasiaJuridica" name="nome_fantasia" maxlength="150" value="{{ form_data.nome_fantasia }}">
-        <span class="form-note">Campo opcional</span>
-      </div>
-
-      <div class="form-group">
-        <label for="dataAberturaJuridica" class="required">Data de Abertura</label>
-        <input type="date" id="dataAberturaJuridica" name="data_abertura" value="{{ form_data.data_abertura }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="inscricaoEstadualJuridica">Inscrição Estadual</label>
-        <input type="text" id="inscricaoEstadualJuridica" name="inscricao_estadual" maxlength="20" value="{{ form_data.inscricao_estadual }}">
-        <span class="form-note">Campo opcional</span>
-      </div>
-
-      <div class="form-section-title">Contato</div>
-
-      <div class="form-group">
-        <label for="telefonePrincipalJuridica" class="required">Telefone Principal</label>
-        <input type="tel" id="telefonePrincipalJuridica" name="telefone_principal" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_principal }}" required>
-        <span class="form-error" id="telefonePrincipalJuridicaError"></span>
-        <span class="form-success" id="telefonePrincipalJuridicaSuccess">✓ Telefone válido</span>
-      </div>
-
-      <div class="form-group">
-        <label for="telefoneSecundarioJuridica">Telefone Secundário</label>
-        <input type="tel" id="telefoneSecundarioJuridica" name="telefone_secundario" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_secundario }}">
-        <span class="form-note">Campo opcional</span>
-      </div>
-
-      <div class="form-group">
-        <label for="siteJuridica">Site Institucional</label>
-        <input type="url" id="siteJuridica" name="site" placeholder="https://www.empresa.com" value="{{ form_data.site }}">
-        <span class="form-note">Campo opcional</span>
-      </div>
-
-      <div class="form-section-title">Endereço</div>
-
-      <div class="form-group">
-        <label for="cepJuridica" class="required">CEP</label>
-        <input type="text" id="cepJuridica" name="cep" maxlength="9" placeholder="00000-000" value="{{ form_data.cep }}" required>
-        <span class="form-loading" id="cepJuridicaLoading">🔄 Buscando CEP...</span>
-        <span class="form-error" id="cepJuridicaError"></span>
-        <span class="form-success" id="cepJuridicaSuccess">✓ CEP encontrado</span>
-      </div>
-
-      <div class="form-group">
-        <label for="logradouroJuridica" class="required">Logradouro</label>
-        <input type="text" id="logradouroJuridica" name="logradouro" maxlength="150" value="{{ form_data.logradouro }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="numeroJuridica" class="required">Número</label>
-        <input type="text" id="numeroJuridica" name="numero" maxlength="10" value="{{ form_data.numero }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="complementoJuridica">Complemento</label>
-        <input type="text" id="complementoJuridica" name="complemento" maxlength="50" placeholder="Sala, Andar, etc" value="{{ form_data.complemento }}">
-        <span class="form-note">Campo opcional</span>
-      </div>
-
-      <div class="form-group">
-        <label for="bairroJuridica" class="required">Bairro</label>
-        <input type="text" id="bairroJuridica" name="bairro" maxlength="80" value="{{ form_data.bairro }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="cidadeJuridica" class="required">Cidade</label>
-        <input type="text" id="cidadeJuridica" name="cidade" maxlength="100" value="{{ form_data.cidade }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="estadoJuridica" class="required">Estado</label>
-        <input type="text" id="estadoJuridica" name="estado" maxlength="2" placeholder="SP" value="{{ form_data.estado }}" required>
-      </div>
-
-      <div class="form-group">
-        <label for="paisJuridica" class="required">País</label>
-        <input type="text" id="paisJuridica" name="pais" maxlength="50" value="{{ form_data.pais|default:'Brasil' }}" required>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Finalizar Cadastro</button>
+      <button type="submit">Finalizar Cadastro</button>
     </form>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
   <script>
     function mascaraCPF(v) {
       v = v.replace(/\D/g, '');
@@ -507,686 +569,70 @@
       return v;
     }
 
-    // Máscaras Pessoa Física
-    document.getElementById('cpfFisica').addEventListener('input', function(e) {
+    document.getElementById('cpfFisica')?.addEventListener('input', function(e) {
       e.target.value = mascaraCPF(e.target.value);
     });
-    document.getElementById('cepFisica').addEventListener('input', function(e) {
+    document.getElementById('cepFisica')?.addEventListener('input', function(e) {
       e.target.value = mascaraCEP(e.target.value);
     });
-    document.getElementById('telefonePrincipalFisica').addEventListener('input', function(e) {
+    document.getElementById('telefonePrincipalFisica')?.addEventListener('input', function(e) {
       e.target.value = mascaraTelefone(e.target.value);
     });
-    document.getElementById('telefoneSecundarioFisica').addEventListener('input', function(e) {
+    document.getElementById('telefoneSecundarioFisica')?.addEventListener('input', function(e) {
       e.target.value = mascaraTelefone(e.target.value);
     });
 
-    // Busca CEP Pessoa Física
-    document.getElementById('cepFisica').addEventListener('blur', async function() {
-      const cepNumeros = this.value.replace(/\D/g, '');
-      if (cepNumeros.length === 8) {
-        try {
-          const response = await fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
-          const data = await response.json();
-          if (!data.erro) {
-            document.getElementById('logradouroFisica').value = data.logradouro || '';
-            document.getElementById('bairroFisica').value = data.bairro || '';
-            document.getElementById('cidadeFisica').value = data.localidade || '';
-            document.getElementById('estadoFisica').value = data.uf || '';
-          }
-        } catch (error) {
-          console.error('Erro ao buscar CEP:', error);
-        }
-      }
-    });
-
-    // Máscaras Pessoa Jurídica
-    document.getElementById('cnpjJuridica').addEventListener('input', function(e) {
+    document.getElementById('cnpjJuridica')?.addEventListener('input', function(e) {
       e.target.value = mascaraCNPJ(e.target.value);
     });
-    document.getElementById('cepJuridica').addEventListener('input', function(e) {
+    document.getElementById('cepJuridica')?.addEventListener('input', function(e) {
       e.target.value = mascaraCEP(e.target.value);
     });
-    document.getElementById('telefonePrincipalJuridica').addEventListener('input', function(e) {
+    document.getElementById('telefonePrincipalJuridica')?.addEventListener('input', function(e) {
       e.target.value = mascaraTelefone(e.target.value);
     });
-    document.getElementById('telefoneSecundarioJuridica').addEventListener('input', function(e) {
+    document.getElementById('telefoneSecundarioJuridica')?.addEventListener('input', function(e) {
       e.target.value = mascaraTelefone(e.target.value);
     });
 
-    // Busca CEP Pessoa Jurídica
-    document.getElementById('cepJuridica').addEventListener('blur', async function() {
-      const cepNumeros = this.value.replace(/\D/g, '');
+    async function buscarCEP(cepInput, logradouroInput, bairroInput, cidadeInput, estadoInput) {
+      const cepNumeros = cepInput.value.replace(/\D/g, '');
       if (cepNumeros.length === 8) {
         try {
-          const response = await fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
+          const response = await fetch('https://viacep.com.br/ws/' + cepNumeros + '/json/');
           const data = await response.json();
           if (!data.erro) {
-            document.getElementById('logradouroJuridica').value = data.logradouro || '';
-            document.getElementById('bairroJuridica').value = data.bairro || '';
-            document.getElementById('cidadeJuridica').value = data.localidade || '';
-            document.getElementById('estadoJuridica').value = data.uf || '';
+            logradouroInput.value = data.logradouro || '';
+            bairroInput.value = data.bairro || '';
+            cidadeInput.value = data.localidade || '';
+            estadoInput.value = data.uf || '';
           }
         } catch (error) {
           console.error('Erro ao buscar CEP:', error);
         }
       }
+    }
+
+    document.getElementById('cepFisica')?.addEventListener('blur', function() {
+      buscarCEP(this, document.getElementById('logradouroFisica'), document.getElementById('bairroFisica'), document.getElementById('cidadeFisica'), document.getElementById('estadoFisica'));
     });
 
-    // Abas
-    document.getElementById('btnFisica').addEventListener('click', () => {
+    document.getElementById('cepJuridica')?.addEventListener('blur', function() {
+      buscarCEP(this, document.getElementById('logradouroJuridica'), document.getElementById('bairroJuridica'), document.getElementById('cidadeJuridica'), document.getElementById('estadoJuridica'));
+    });
+
+    document.getElementById('btnFisica')?.addEventListener('click', () => {
       document.getElementById('btnFisica').classList.add('active');
       document.getElementById('btnJuridica').classList.remove('active');
       document.getElementById('formFisica').classList.add('active');
       document.getElementById('formJuridica').classList.remove('active');
     });
 
-    document.getElementById('btnJuridica').addEventListener('click', () => {
+    document.getElementById('btnJuridica')?.addEventListener('click', () => {
       document.getElementById('btnJuridica').classList.add('active');
       document.getElementById('btnFisica').classList.remove('active');
       document.getElementById('formJuridica').classList.add('active');
       document.getElementById('formFisica').classList.remove('active');
-    });
-  </script>
-</body>
-</html>
-    * {
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-
-    body {
-      background: #f8fafc;
-      margin: 0;
-      padding: 40px;
-      color: #111;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    h2 {
-      margin: 0 0 10px 0;
-      font-size: 2rem;
-    }
-
-    .subtitle {
-      color: #6b7280;
-      font-size: 0.95rem;
-      margin: 0;
-    }
-
-    .login-link {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .login-link a {
-      color: #667eea;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
-    }
-
-    .login-link a:hover {
-      color: #764ba2;
-    }
-
-    .tabs {
-      display: flex;
-      background: #e2e8f0;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 30px;
-      width: 320px;
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 12px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .tab-btn.active {
-      background: #16a34a;
-      color: #fff;
-    }
-
-    .form-box {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      width: 450px;
-      display: none;
-      animation: fade 0.3s ease-in-out;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .form-box.active {
-      display: block;
-    }
-
-    @keyframes fade {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .form-group {
-      margin-top: 15px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 2px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 14px;
-      transition: border-color 0.3s;
-    }
-
-    input:focus {
-      border-color: #16a34a;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
-    }
-
-    input.valid {
-      border-color: #16a34a;
-      background-color: #f0fdf4;
-    }
-
-    input.invalid {
-      border-color: #ef4444;
-      background-color: #fef2f2;
-    }
-
-    .optional {
-      font-size: 0.85em;
-      color: #64748b;
-    }
-
-    .error-message {
-      color: #ef4444;
-      font-size: 0.8em;
-      margin-top: 3px;
-      display: none;
-    }
-
-    .error-message.show {
-      display: block;
-    }
-
-    .success-message {
-      color: #16a34a;
-      font-size: 0.8em;
-      margin-top: 3px;
-      display: none;
-    }
-
-    .success-message.show {
-      display: block;
-    }
-
-    .submit-btn {
-      background-color: #16a34a;
-      color: #fff;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      width: 100%;
-      font-size: 16px;
-      font-weight: 600;
-      margin-top: 20px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .submit-btn:hover {
-      background-color: #15803d;
-    }
-
-    .loading-indicator {
-      font-size: 0.8em;
-      color: #6b7280;
-      margin-top: 3px;
-      display: none;
-    }
-
-    .loading-indicator.show {
-      display: block;
-    }
-
-    .separator {
-      border-top: 1px solid #e5e7eb;
-      margin: 20px 0;
-      padding-top: 20px;
-    }
-
-    .separator-title {
-      color: #9ca3af;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h2>🛒 Criar Conta</h2>
-    <p class="subtitle">Preencha os dados abaixo para se cadastrar</p>
-  </div>
-
-  <div class="login-link">
-    <a href="{% url 'login_usuario' %}">← Já tenho conta</a>
-  </div>
-
-  <!-- Exibir Mensagens de Erro/Sucesso -->
-  {% if messages %}
-  <div style="width: 450px; margin-bottom: 20px;">
-    {% for message in messages %}
-    <div style="
-      padding: 12px 15px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      {% if message.tags == 'error' %}
-        background-color: #fee2e2;
-        border: 1px solid #ef4444;
-        color: #991b1b;
-      {% else %}
-        background-color: #dcfce7;
-        border: 1px solid #16a34a;
-        color: #166534;
-      {% endif %}
-    ">
-      {% if message.tags == 'error' %}❌ {% else %}✓ {% endif %}{{ message }}
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  <div class="tabs">
-    <button class="tab-btn {% if tipo_selecionado == 'pj' %}{% else %}active{% endif %}" id="btnFisica">Pessoa Física</button>
-    <button class="tab-btn {% if tipo_selecionado == 'pj' %}active{% endif %}" id="btnJuridica">Pessoa Jurídica</button>
-  </div>
-
-  <!-- Formulário Pessoa Física -->
-  <form method="post" action="{% url 'cadastro_usuario' %}" class="form-box {% if tipo_selecionado != 'pj' %}active{% endif %}" id="formFisica">
-    {% csrf_token %}
-    <input type="hidden" name="tipo_cliente" value="PF">
-
-    <div class="separator-title">Credenciais de Acesso</div>
-
-    <div class="form-group">
-      <label>Email <span style="color: #ef4444;">*</span></label>
-      <input type="email" name="email" id="emailFisica" placeholder="seu@email.com" value="{{ form_data.email }}" required>
-      <div class="error-message" id="emailFisicaError"></div>
-      <div class="success-message" id="emailFisicaSuccess">✓ Email válido</div>
-    </div>
-
-    <div class="form-group">
-      <label>Senha <span style="color: #ef4444;">*</span></label>
-      <input type="password" name="senha" id="senhaFisica" placeholder="Mínimo 6 caracteres" required>
-      <div class="error-message" id="senhaFisicaError"></div>
-    </div>
-
-    <div class="form-group">
-      <label>Confirmar Senha <span style="color: #ef4444;">*</span></label>
-      <input type="password" name="confirmar_senha" id="confirmarSenhaFisica" placeholder="Confirme sua senha" required>
-      <div class="error-message" id="confirmarSenhaFisicaError"></div>
-    </div>
-
-    <div class="separator">
-      <div class="separator-title">Dados Pessoais</div>
-    </div>
-
-    <div class="form-group">
-      <label>CPF <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="cpf" id="cpfFisica" maxlength="14" placeholder="000.000.000-00" value="{{ form_data.cpf }}" required>
-      <div class="error-message" id="cpfFisicaError"></div>
-      <div class="success-message" id="cpfFisicaSuccess">✓ CPF válido</div>
-    </div>
-
-    <div class="form-group">
-      <label>Nome Completo <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="nome" id="nomeFisica" maxlength="150" placeholder="Digite seu nome completo" value="{{ form_data.nome }}" required>
-      <div class="error-message" id="nomeFisicaError"></div>
-    </div>
-
-    <div class="form-group">
-      <label>Data de Nascimento <span style="color: #ef4444;">*</span></label>
-      <input type="date" name="data_nascimento" id="dataNascimentoFisica" value="{{ form_data.data_nascimento }}" required>
-      <div class="error-message" id="dataNascimentoFisicaError"></div>
-    </div>
-
-    <div class="form-group">
-      <label>RG <span class="optional">(opcional)</span></label>
-      <input type="text" name="rg" id="rgFisica" maxlength="20" value="{{ form_data.rg }}">
-    </div>
-
-    <div class="form-group">
-      <label>Telefone Principal <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="telefone_principal" id="telefonePrincipalFisica" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_principal }}" required>
-      <div class="error-message" id="telefonePrincipalFisicaError"></div>
-      <div class="success-message" id="telefonePrincipalFisicaSuccess">✓ Telefone válido</div>
-    </div>
-
-    <div class="form-group">
-      <label>Telefone Secundário <span class="optional">(opcional)</span></label>
-      <input type="text" name="telefone_secundario" id="telefoneSecundarioFisica" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_secundario }}">
-      <div class="error-message" id="telefoneSecundarioFisicaError"></div>
-    </div>
-
-    <div class="separator">
-      <div class="separator-title">Endereço</div>
-    </div>
-
-    <div class="form-group">
-      <label>CEP <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="cep" id="cepFisica" maxlength="9" placeholder="00000-000" value="{{ form_data.cep }}" required>
-      <div class="loading-indicator" id="cepFisicaLoading">🔄 Buscando CEP...</div>
-      <div class="error-message" id="cepFisicaError"></div>
-      <div class="success-message" id="cepFisicaSuccess">✓ CEP encontrado</div>
-    </div>
-
-    <div class="form-group">
-      <label>Logradouro <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="logradouro" id="logradouroFisica" maxlength="150" value="{{ form_data.logradouro }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Número <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="numero" id="numeroFisica" maxlength="10" value="{{ form_data.numero }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Complemento <span class="optional">(opcional)</span></label>
-      <input type="text" name="complemento" id="complementoFisica" maxlength="50" value="{{ form_data.complemento }}">
-    </div>
-
-    <div class="form-group">
-      <label>Bairro <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="bairro" id="bairroFisica" maxlength="80" value="{{ form_data.bairro }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Cidade <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="cidade" id="cidadeFisica" maxlength="100" value="{{ form_data.cidade }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Estado <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="estado" id="estadoFisica" maxlength="2" value="{{ form_data.estado }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>País <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="pais" id="paisFisica" maxlength="50" value="{{ form_data.pais|default:'Brasil' }}" required>
-    </div>
-
-    <button type="submit" class="submit-btn">Finalizar Cadastro</button>
-  </form>
-
-  <!-- Formulário Pessoa Jurídica -->
-  <form method="post" action="{% url 'cadastro_usuario' %}" class="form-box {% if tipo_selecionado == 'pj' %}active{% endif %}" id="formJuridica">
-    {% csrf_token %}
-    <input type="hidden" name="tipo_cliente" value="PJ">
-
-    <div class="separator-title">Credenciais de Acesso</div>
-
-    <div class="form-group">
-      <label>Email <span style="color: #ef4444;">*</span></label>
-      <input type="email" name="email" id="emailJuridica" placeholder="contato@empresa.com" value="{{ form_data.email }}" required>
-      <div class="error-message" id="emailJuridicaError"></div>
-      <div class="success-message" id="emailJuridicaSuccess">✓ Email válido</div>
-    </div>
-
-    <div class="form-group">
-      <label>Senha <span style="color: #ef4444;">*</span></label>
-      <input type="password" name="senha" id="senhaJuridica" placeholder="Mínimo 6 caracteres" required>
-      <div class="error-message" id="senhaJuridicaError"></div>
-    </div>
-
-    <div class="form-group">
-      <label>Confirmar Senha <span style="color: #ef4444;">*</span></label>
-      <input type="password" name="confirmar_senha" id="confirmarSenhaJuridica" placeholder="Confirme sua senha" required>
-      <div class="error-message" id="confirmarSenhaJuridicaError"></div>
-    </div>
-
-    <div class="separator">
-      <div class="separator-title">Dados da Empresa</div>
-    </div>
-
-    <div class="form-group">
-      <label>CNPJ <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="cnpj" id="cnpjJuridica" maxlength="18" placeholder="00.000.000/0000-00" value="{{ form_data.cnpj }}" required>
-      <div class="error-message" id="cnpjJuridicaError"></div>
-      <div class="success-message" id="cnpjJuridicaSuccess">✓ CNPJ válido</div>
-    </div>
-
-    <div class="form-group">
-      <label>Razão Social <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="razao_social" id="razaoSocialJuridica" maxlength="150" value="{{ form_data.razao_social }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Nome de Fantasia <span class="optional">(opcional)</span></label>
-      <input type="text" name="nome_fantasia" id="nomeFantasiaJuridica" maxlength="150" value="{{ form_data.nome_fantasia }}">
-    </div>
-
-    <div class="form-group">
-      <label>Data de Abertura <span style="color: #ef4444;">*</span></label>
-      <input type="date" name="data_abertura" id="dataAberturaJuridica" value="{{ form_data.data_abertura }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Inscrição Estadual <span class="optional">(opcional)</span></label>
-      <input type="text" name="inscricao_estadual" id="inscricaoEstadualJuridica" maxlength="20" value="{{ form_data.inscricao_estadual }}">
-    </div>
-
-    <div class="form-group">
-      <label>Telefone Principal <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="telefone_principal" id="telefonePrincipalJuridica" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_principal }}" required>
-      <div class="error-message" id="telefonePrincipalJuridicaError"></div>
-      <div class="success-message" id="telefonePrincipalJuridicaSuccess">✓ Telefone válido</div>
-    </div>
-
-    <div class="form-group">
-      <label>Telefone Secundário <span class="optional">(opcional)</span></label>
-      <input type="text" name="telefone_secundario" id="telefoneSecundarioJuridica" maxlength="15" placeholder="(00) 00000-0000" value="{{ form_data.telefone_secundario }}">
-    </div>
-
-    <div class="form-group">
-      <label>Site Institucional <span class="optional">(opcional)</span></label>
-      <input type="url" name="site" id="siteJuridica" placeholder="https://www.exemplo.com" value="{{ form_data.site }}">
-    </div>
-
-    <div class="separator">
-      <div class="separator-title">Endereço</div>
-    </div>
-
-    <div class="form-group">
-      <label>CEP <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="cep" id="cepJuridica" maxlength="9" placeholder="00000-000" value="{{ form_data.cep }}" required>
-      <div class="loading-indicator" id="cepJuridicaLoading">🔄 Buscando CEP...</div>
-      <div class="error-message" id="cepJuridicaError"></div>
-      <div class="success-message" id="cepJuridicaSuccess">✓ CEP encontrado</div>
-    </div>
-
-    <div class="form-group">
-      <label>Logradouro <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="logradouro" id="logradouroJuridica" maxlength="150" value="{{ form_data.logradouro }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Número <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="numero" id="numeroJuridica" maxlength="10" value="{{ form_data.numero }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Complemento <span class="optional">(opcional)</span></label>
-      <input type="text" name="complemento" id="complementoJuridica" maxlength="50" value="{{ form_data.complemento }}">
-    </div>
-
-    <div class="form-group">
-      <label>Bairro <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="bairro" id="bairroJuridica" maxlength="80" value="{{ form_data.bairro }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Cidade <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="cidade" id="cidadeJuridica" maxlength="100" value="{{ form_data.cidade }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>Estado <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="estado" id="estadoJuridica" maxlength="2" value="{{ form_data.estado }}" required>
-    </div>
-
-    <div class="form-group">
-      <label>País <span style="color: #ef4444;">*</span></label>
-      <input type="text" name="pais" id="paisJuridica" maxlength="50" value="{{ form_data.pais|default:'Brasil' }}" required>
-    </div>
-
-    <button type="submit" class="submit-btn">Finalizar Cadastro</button>
-  </form>
-
-  <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
-  <script>
-    // ==================== MÁSCARAS SIMPLES ====================
-    function mascaraCPF(v) {
-      v = v.replace(/\D/g, '');
-      v = v.replace(/(\d{3})(\d)/, '$1.$2');
-      v = v.replace(/(\d{3})(\d)/, '$1.$2');
-      v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-      return v;
-    }
-
-    function mascaraCNPJ(v) {
-      v = v.replace(/\D/g, '');
-      v = v.replace(/^(\d{2})(\d)/, '$1.$2');
-      v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-      v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
-      v = v.replace(/(\d{4})(\d)/, '$1-$2');
-      return v;
-    }
-
-    function mascaraCEP(v) {
-      v = v.replace(/\D/g, '');
-      v = v.replace(/(\d{5})(\d)/, '$1-$2');
-      return v;
-    }
-
-    function mascaraTelefone(v) {
-      v = v.replace(/\D/g, '');
-      v = v.replace(/^(\d{2})(\d)/, '($1) $2');
-      v = v.replace(/(\d{5})(\d)/, '$1-$2');
-      return v;
-    }
-
-    // ==================== EVENT LISTENERS PARA MÁSCARAS ====================
-    document.getElementById('cpfFisica').addEventListener('input', function(e) {
-      e.target.value = mascaraCPF(e.target.value);
-    });
-
-    document.getElementById('cnpjJuridica').addEventListener('input', function(e) {
-      e.target.value = mascaraCNPJ(e.target.value);
-    });
-
-    document.getElementById('cepFisica').addEventListener('input', function(e) {
-      e.target.value = mascaraCEP(e.target.value);
-    });
-
-    document.getElementById('cepFisica').addEventListener('blur', async function() {
-      const cepNumeros = this.value.replace(/\D/g, '');
-      if (cepNumeros.length === 8) {
-        try {
-          const response = await fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
-          const data = await response.json();
-          if (!data.erro) {
-            document.getElementById('logradouroFisica').value = data.logradouro || '';
-            document.getElementById('bairroFisica').value = data.bairro || '';
-            document.getElementById('cidadeFisica').value = data.localidade || '';
-            document.getElementById('estadoFisica').value = data.uf || '';
-          }
-        } catch (error) {
-          console.error('Erro ao buscar CEP:', error);
-        }
-      }
-    });
-
-    document.getElementById('cepJuridica').addEventListener('input', function(e) {
-      e.target.value = mascaraCEP(e.target.value);
-    });
-
-    document.getElementById('cepJuridica').addEventListener('blur', async function() {
-      const cepNumeros = this.value.replace(/\D/g, '');
-      if (cepNumeros.length === 8) {
-        try {
-          const response = await fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
-          const data = await response.json();
-          if (!data.erro) {
-            document.getElementById('logradouroJuridica').value = data.logradouro || '';
-            document.getElementById('bairroJuridica').value = data.bairro || '';
-            document.getElementById('cidadeJuridica').value = data.localidade || '';
-            document.getElementById('estadoJuridica').value = data.uf || '';
-          }
-        } catch (error) {
-          console.error('Erro ao buscar CEP:', error);
-        }
-      }
-    });
-
-    document.getElementById('telefonePrincipalFisica').addEventListener('input', function(e) {
-      e.target.value = mascaraTelefone(e.target.value);
-    });
-
-    document.getElementById('telefonePrincipalJuridica').addEventListener('input', function(e) {
-      e.target.value = mascaraTelefone(e.target.value);
-    });
-
-    document.getElementById('telefoneSecundarioFisica').addEventListener('input', function(e) {
-      e.target.value = mascaraTelefone(e.target.value);
-    });
-
-    document.getElementById('telefoneSecundarioJuridica').addEventListener('input', function(e) {
-      e.target.value = mascaraTelefone(e.target.value);
-    });
-
-    // ==================== ABAS ====================
-    const btnFisica = document.getElementById('btnFisica');
-    const btnJuridica = document.getElementById('btnJuridica');
-    const formFisica = document.getElementById('formFisica');
-    const formJuridica = document.getElementById('formJuridica');
-
-    btnFisica.addEventListener('click', () => {
-      btnFisica.classList.add('active');
-      btnJuridica.classList.remove('active');
-      formFisica.classList.add('active');
-      formJuridica.classList.remove('active');
-    });
-
-    btnJuridica.addEventListener('click', () => {
-      btnJuridica.classList.add('active');
-      btnFisica.classList.remove('active');
-      formJuridica.classList.add('active');
-      formFisica.classList.remove('active');
     });
   </script>
 </body>

@@ -46,9 +46,14 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <form method="POST" action="{% url 'logout_usuario' %}" class="d-inline">
+                            <a class="nav-link" href="{% url 'orders:list' %}">
+                                <i class="fas fa-box"></i> Meus Pedidos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="POST" action="{% url 'logout_usuario' %}" class="d-inline" style="display: inline;">
                                 {% csrf_token %}
-                                <button type="submit" class="nav-link btn btn-link">Sair</button>
+                                <button type="submit" class="nav-link btn btn-link" style="background: none; border: none; padding: 0.5rem 1rem; color: inherit; cursor: pointer; text-decoration: none;">Sair</button>
                             </form>
                         </li>
                     {% else %}

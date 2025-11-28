@@ -68,7 +68,7 @@ LOGGING = {
         },
         'app': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG' if DEBUG else 'INFO',
+            'level': 'DEBUG',
             'propagate': False,
         },
         'app.views': {

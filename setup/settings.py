@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'
+    'app',
+    'orders',
+    'payment'
 ]
 
 MIDDLEWARE = [
@@ -200,3 +202,11 @@ LOGGING = {
         },
     },
 }
+
+# ===== STRIPE CONFIGURATION =====
+from decouple import config
+
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY', default='')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='')
+STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='')
+STRIPE_API_VERSION = config('STRIPE_API_VERSION', default='2024-11-20')

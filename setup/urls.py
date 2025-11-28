@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from app import views
@@ -43,6 +43,12 @@ urlpatterns = [
     path('carrinho/atualizar/<int:item_id>/', views.atualizar_item_carrinho, name='atualizar_item_carrinho'),
     path('carrinho/remover/<int:item_id>/', views.remover_item_carrinho, name='remover_item_carrinho'),
     path('carrinho/limpar/', views.limpar_carrinho, name='limpar_carrinho'),
+    
+    # Pedidos
+    path('orders/', include('orders.urls')),
+    
+    # Pagamento
+    path('payment/', include('payment.urls')),
 ]
 
 # Servir arquivos de mídia durante desenvolvimento

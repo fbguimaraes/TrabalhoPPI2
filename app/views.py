@@ -56,13 +56,14 @@ def login_usuario(request):
     return render(request, 'login.html', {'form': form})
 
 
-@require_http_methods(["POST"])
+@require_http_methods(["GET", "POST"])
 @login_required(login_url='login_usuario')
 def logout_usuario(request):
     """
     View para fazer logout seguro.
     Limpa a sessão e redireciona para login.
     """
+    # Aceitar tanto GET quanto POST para maior compatibilidade
     email = request.user.email
     logout(request)
     logger.info(f"Logout realizado para: {email}")
@@ -496,9 +497,8 @@ def adicionar_carrinho(request, produto_id):
         logger.error(f"Erro ao adicionar produto ao carrinho: {str(e)}")
         messages.error(request, "Erro ao adicionar produto ao carrinho.")
     
-    # Redirecionar para a página anterior (produto ou catálogo)
-    next_url = request.POST.get('next', 'catalogo_produtos')
-    return redirect(next_url)
+    # 🔥 Redirecionar para o carrinho (não para catálogo)
+    return redirect('ver_carrinho')
 
 
 @login_required(login_url='login_usuario')

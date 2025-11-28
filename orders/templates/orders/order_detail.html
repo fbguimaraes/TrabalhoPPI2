@@ -1,0 +1,422 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes do Pedido #{{ order.id }}{% endblock %}
+
+{% block content %}
+<style>
+    .order-detail-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .order-detail-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-detail-header h1 {
+        margin: 0;
+        font-size: 2.5em;
+    }
+
+    .order-status-badge {
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .status-paid {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .order-detail-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .section {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 25px;
+    }
+
+    .section-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+    }
+
+    .info-row {
+        margin: 15px 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-label {
+        color: #666;
+        font-weight: bold;
+        font-size: 0.95em;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        color: #333;
+        font-size: 1.05em;
+    }
+
+    .items-section {
+        grid-column: 1 / -1;
+    }
+
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    .items-table thead {
+        background: #f8f9fa;
+    }
+
+    .items-table th {
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+        color: #333;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .items-table td {
+        padding: 12px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .items-table tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    .product-name {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .amount {
+        text-align: right;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .totals-section {
+        grid-column: 1 / -1;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 15px 0;
+        font-size: 1.1em;
+    }
+
+    .total-row.grand-total {
+        border-top: 2px solid rgba(255,255,255,0.3);
+        border-bottom: 2px solid rgba(255,255,255,0.3);
+        padding: 15px 0;
+        margin: 20px 0;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    .total-label {
+        font-weight: bold;
+    }
+
+    .total-value {
+        text-align: right;
+    }
+
+    .actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: #667eea;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #764ba2;
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+    .back-button:hover {
+        background: #5a6268;
+    }
+
+    .order-timeline {
+        margin-top: 20px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 5px;
+    }
+
+    .timeline-item {
+        display: flex;
+        margin: 15px 0;
+        align-items: flex-start;
+    }
+
+    .timeline-icon {
+        width: 40px;
+        height: 40px;
+        background: #667eea;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .timeline-content {
+        flex: 1;
+    }
+
+    .timeline-title {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .timeline-date {
+        color: #666;
+        font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+        .order-detail-container {
+            margin: 20px 10px;
+        }
+
+        .order-detail-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .order-detail-header h1 {
+            font-size: 1.8em;
+        }
+
+        .order-detail-content {
+            grid-template-columns: 1fr;
+        }
+
+        .items-section {
+            grid-column: 1;
+        }
+
+        .totals-section {
+            grid-column: 1;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="order-detail-container">
+    <a href="{% url 'orders:list' %}" class="back-button">← Voltar para Pedidos</a>
+
+    <div class="order-detail-header">
+        <div>
+            <h1>Pedido #{{ order.id }}</h1>
+            <p style="margin: 10px 0 0 0;">{{ order.created|date:"d/m/Y H:i" }}</p>
+        </div>
+        <span class="order-status-badge {% if order.paid %}status-paid{% else %}status-pending{% endif %}">
+            {% if order.paid %}✓ PAGO{% else %}⏳ PENDENTE{% endif %}
+        </span>
+    </div>
+
+    <div class="order-detail-content">
+        <!-- Informações do Cliente -->
+        <div class="section">
+            <h2 class="section-title">👤 Informações do Cliente</h2>
+            <div class="info-row">
+                <span class="info-label">Nome Completo:</span>
+                <span class="info-value">{{ order.first_name }} {{ order.last_name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ order.email }}</span>
+            </div>
+        </div>
+
+        <!-- Endereço de Entrega -->
+        <div class="section">
+            <h2 class="section-title">📍 Endereço de Entrega</h2>
+            <div class="info-row">
+                <span class="info-label">Rua/Avenida:</span>
+                <span class="info-value">{{ order.address }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Cidade:</span>
+                <span class="info-value">{{ order.city }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">CEP:</span>
+                <span class="info-value">{{ order.postal_code }}</span>
+            </div>
+        </div>
+
+        <!-- Itens do Pedido -->
+        <div class="section items-section">
+            <h2 class="section-title">📦 Produtos Comprados</h2>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th style="text-align: center;">Quantidade</th>
+                        <th style="text-align: right;">Preço Unitário</th>
+                        <th style="text-align: right;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                        <tr>
+                            <td class="product-name">{{ item.product.nome }}</td>
+                            <td style="text-align: center;">{{ item.quantity }}</td>
+                            <td style="text-align: right;">R${{ item.price|floatformat:2 }}</td>
+                            <td class="amount">R${{ item.get_cost|floatformat:2 }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Resumo Financeiro -->
+        <div class="totals-section">
+            <div class="total-row">
+                <span class="total-label">Subtotal:</span>
+                <span class="total-value">R${{ order.get_total_cost|floatformat:2 }}</span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Frete:</span>
+                <span class="total-value">R$0,00</span>
+            </div>
+            <div class="total-row grand-total">
+                <span class="total-label">TOTAL A PAGAR:</span>
+                <span class="total-value">R${{ order.get_total_cost|floatformat:2 }}</span>
+            </div>
+            {% if order.stripe_id %}
+                <div class="total-row">
+                    <span class="total-label">ID da Transação:</span>
+                    <span class="total-value" style="font-size: 0.9em;">{{ order.stripe_id }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Timeline do Pedido -->
+        <div class="section items-section">
+            <h2 class="section-title">📅 Histórico do Pedido</h2>
+            <div class="order-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">1</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Pedido Criado</div>
+                        <div class="timeline-date">{{ order.created|date:"d/m/Y H:i" }}</div>
+                    </div>
+                </div>
+                {% if order.paid %}
+                    <div class="timeline-item">
+                        <div class="timeline-icon">2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Pagamento Aprovado</div>
+                            <div class="timeline-date">{{ order.updated|date:"d/m/Y H:i" }}</div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="timeline-item">
+                        <div class="timeline-icon">⏳</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Aguardando Pagamento</div>
+                            <div class="timeline-date">Não pago</div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Ações -->
+    <div class="actions">
+        <a href="{% url 'orders:list' %}" class="btn btn-secondary">← Voltar para Pedidos</a>
+        <a href="{% url 'catalogo_produtos' %}" class="btn btn-primary">🛍️ Continuar Comprando</a>
+    </div>
+</div>
+{% endblock %}

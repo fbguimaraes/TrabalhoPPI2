@@ -100,9 +100,9 @@
                             <h5 class="text-success">R$ {{ total_preco|floatformat:2 }}</h5>
                         </div>
                         
-                        <button type="button" class="btn btn-success w-100 mb-2">
+                        <a href="{% url 'orders:create' %}" class="btn btn-success w-100 mb-2">
                             <i class="fas fa-credit-card"></i> Ir para Checkout
-                        </button>
+                        </a>
                         
                         <form method="POST" action="{% url 'limpar_carrinho' %}" class="d-grid">
                             {% csrf_token %}

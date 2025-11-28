@@ -8,58 +8,97 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <style>
     body {
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: var(--spacing-lg);
+      padding: 1.5rem;
     }
 
     .login-container {
-      background: var(--bg-white);
-      border-radius: var(--rounded-lg);
-      box-shadow: var(--shadow-lg);
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
-      padding: var(--spacing-2xl);
+      padding: 2rem;
     }
 
     .login-header {
       text-align: center;
-      margin-bottom: var(--spacing-2xl);
+      margin-bottom: 2rem;
     }
 
     .login-logo {
       font-size: 3rem;
-      margin-bottom: var(--spacing-md);
+      margin-bottom: 1rem;
     }
 
     .login-header h1 {
-      margin: 0 0 var(--spacing-sm) 0;
-      color: var(--text-dark);
+      margin: 0 0 0.5rem 0;
+      color: #1f2937;
     }
 
     .login-header p {
       margin: 0;
-      color: var(--text-muted);
-      font-size: var(--font-size-sm);
+      color: #6b7280;
+      font-size: 0.875rem;
     }
 
     .login-form {
-      margin-bottom: var(--spacing-2xl);
+      margin-bottom: 2rem;
     }
 
-    .form-group {
-      margin-bottom: var(--spacing-xl);
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #374151;
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+
+    .form-group label.required::after {
+      content: ' *';
+      color: #ef4444;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
     }
 
     .login-divider {
       display: flex;
       align-items: center;
-      gap: var(--spacing-lg);
-      margin: var(--spacing-2xl) 0;
-      color: var(--text-light);
+      gap: 1rem;
+      margin: 2rem 0;
+      color: #9ca3af;
     }
 
     .login-divider::before,
@@ -67,7 +106,7 @@
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--border-light);
+      background: #e5e7eb;
     }
 
     .login-footer {
@@ -75,27 +114,69 @@
     }
 
     .login-footer p {
-      margin: 0 0 var(--spacing-md) 0;
-      color: var(--text-muted);
-      font-size: var(--font-size-sm);
+      margin: 0 0 1rem 0;
+      color: #6b7280;
+      font-size: 0.875rem;
     }
 
     .signup-btn {
-      background: var(--bg-lighter);
-      color: var(--primary-green);
-      border: 2px solid var(--primary-green);
-      padding: var(--spacing-md) var(--spacing-xl);
-      border-radius: var(--rounded-md);
+      background: #f3f4f6;
+      color: #16a34a;
+      border: 2px solid #16a34a;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all var(--transition-base);
+      transition: all 0.3s ease;
       text-decoration: none;
       display: inline-block;
     }
 
     .signup-btn:hover {
-      background: var(--primary-green);
-      color: var(--bg-white);
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #15803d;
+    }
+
+    .messages {
+      margin-bottom: 1.5rem;
+    }
+
+    .message {
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.5rem;
+      border-left: 4px solid;
+    }
+
+    .message.error {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+
+    .message.success {
+      background-color: #dcfce7;
+      border-color: #16a34a;
+      color: #166534;
     }
   </style>
 </head>
@@ -122,27 +203,35 @@
 
       <div class="form-group">
         <label for="email" class="required">Email</label>
-        <input 
-          type="email" 
-          id="email" 
-          name="email" 
-          placeholder="seu@email.com"
-          value="{{ email }}"
-          required
-          autofocus
-        >
+        {{ form.email }}
+        {% if form.email.errors %}
+          <div class="error-message" style="color: #ef4444; font-size: 0.8em; margin-top: 3px;">
+            {% for error in form.email.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
 
       <div class="form-group">
         <label for="senha" class="required">Senha</label>
-        <input 
-          type="password" 
-          id="senha" 
-          name="senha" 
-          placeholder="Sua senha"
-          required
-        >
+        {{ form.senha }}
+        {% if form.senha.errors %}
+          <div class="error-message" style="color: #ef4444; font-size: 0.8em; margin-top: 3px;">
+            {% for error in form.senha.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
+
+      {% if form.non_field_errors %}
+        <div class="message error" style="padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 0.5rem; border-left: 4px solid #ef4444; background-color: #fee2e2; color: #991b1b;">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
 
       <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
     </form>

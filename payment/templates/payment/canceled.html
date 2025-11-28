@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Pagamento Cancelado{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card border-warning">
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-times-circle text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <h2 class="text-warning mb-3">Pagamento Cancelado</h2>
+                    <p class="lead text-muted mb-4">
+                        Você cancelou o processo de pagamento. Seu pedido não foi confirmado.
+                    </p>
+                    
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Quer tentar novamente?</strong>
+                        <p class="mb-0">Você pode retornar ao carrinho e tentar novamente.</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'ver_carrinho' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-arrow-left"></i> Voltar ao Carrinho
+                        </a>
+                        <a href="{% url 'catalogo_produtos' %}" class="btn btn-secondary">
+                            <i class="fas fa-shopping-bag"></i> Continuar Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
