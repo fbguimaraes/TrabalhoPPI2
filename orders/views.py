@@ -44,8 +44,8 @@ def order_create(request):
             # Armazenar o ID do pedido na sessão para o próximo passo (pagamento)
             request.session['order_id'] = order.id
             
-            # Redirecionar para o página de pagamento
-            return redirect('payment:process')
+            # Redirecionar para a página de seleção de método de pagamento
+            return redirect('payment:methods')
     else:
         form = OrderCreateForm()
     

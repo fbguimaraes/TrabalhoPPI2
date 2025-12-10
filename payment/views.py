@@ -28,7 +28,17 @@ def payment_methods(request):
     POST: Redireciona para método selecionado
     """
     order_id = request.session.get('order_id')
-    order = get_object_or_404(Order, id=order_id)
+    
+    # Se não houver order_id na sessão, redirecionar para criar pedido
+    if not order_id:
+        messages.error(request, '❌ Nenhum pedido encontrado. Por favor, finalize seu carrinho primeiro.')
+        return redirect('orders:create')
+    
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        messages.error(request, '❌ Pedido não encontrado. Por favor, recrie seu pedido.')
+        return redirect('orders:create')
     
     if request.method == 'POST':
         payment_method = request.POST.get('payment_method')
@@ -58,7 +68,16 @@ def process_card_payment(request):
     POST: Cria sessão Stripe Checkout e redireciona
     """
     order_id = request.session.get('order_id')
-    order = get_object_or_404(Order, id=order_id)
+    
+    if not order_id:
+        messages.error(request, '❌ Nenhum pedido encontrado. Por favor, finalize seu carrinho primeiro.')
+        return redirect('orders:create')
+    
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        messages.error(request, '❌ Pedido não encontrado. Por favor, recrie seu pedido.')
+        return redirect('orders:create')
     
     if request.method == 'POST':
         # URLs de sucesso e cancelamento
@@ -122,7 +141,16 @@ def process_boleto_payment(request):
     POST: Gera e salva boleto no banco de dados
     """
     order_id = request.session.get('order_id')
-    order = get_object_or_404(Order, id=order_id)
+    
+    if not order_id:
+        messages.error(request, '❌ Nenhum pedido encontrado. Por favor, finalize seu carrinho primeiro.')
+        return redirect('orders:create')
+    
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        messages.error(request, '❌ Pedido não encontrado. Por favor, recrie seu pedido.')
+        return redirect('orders:create')
     
     if request.method == 'POST':
         try:
@@ -146,8 +174,12 @@ def process_boleto_payment(request):
             
             # Obter CPF se disponível
             try:
-                pagador_cpf = request.user.pf.cpf
-            except:
+                pf = request.user.pf
+                pagador_cpf = pf.cpf if pf else "000.000.000-00"
+            except AttributeError:
+                pagador_cpf = "000.000.000-00"
+            except Exception as e:
+                logger.warning(f"Erro ao obter CPF do usuário {request.user.id}: {str(e)}")
                 pagador_cpf = "000.000.000-00"
             
             # Criar boleto
@@ -185,8 +217,14 @@ def boleto_detail(request, boleto_id):
     """
     boleto = get_object_or_404(Boleto, id=boleto_id)
     
-    # Verificar permissões
-    if boleto.order.user != request.user:
+    # Verificar permissões: Order não tem campo `user` por design.
+    # Verificamos o usuário associado ao Payment relacionado ao boleto.
+    try:
+        pagamento_usuario = boleto.payment.user
+    except Exception:
+        pagamento_usuario = None
+
+    if pagamento_usuario and pagamento_usuario != request.user:
         messages.error(request, '❌ Acesso negado.')
         return redirect('catalogo_produtos')
     
@@ -206,7 +244,16 @@ def process_pix_payment(request):
     POST: Gera PIX e aguarda confirmação
     """
     order_id = request.session.get('order_id')
-    order = get_object_or_404(Order, id=order_id)
+    
+    if not order_id:
+        messages.error(request, '❌ Nenhum pedido encontrado. Por favor, finalize seu carrinho primeiro.')
+        return redirect('orders:create')
+    
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        messages.error(request, '❌ Pedido não encontrado. Por favor, recrie seu pedido.')
+        return redirect('orders:create')
     
     if request.method == 'POST':
         try:
