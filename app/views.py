@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q, Prefetch
+from django.db.models import Q, Prefetch, Count
 from django.core.cache import cache
 from django.views.decorators.http import require_http_methods
 from django.http import Http404
@@ -74,10 +74,14 @@ def logout_usuario(request):
 @login_required(login_url='login_usuario')
 def perfil_usuario(request):
     """
-    View para exibir perfil do usuário autenticado.
+    View para exibir e atualizar perfil do usuário autenticado.
     
+    GET: Exibe formulário de perfil
+    POST: Atualiza dados de perfil (foto, nome, sobrenome)
     Busca dados adicionais (PF ou PJ) se existirem.
     """
+    from .forms import ClienteProfileForm
+    
     usuario = request.user
     dados_adicionais = None
     
@@ -89,10 +93,24 @@ def perfil_usuario(request):
     except (PessoaFisica.DoesNotExist, PessoaJuridica.DoesNotExist):
         logger.warning(f"Dados de {usuario.tipo_cliente} não encontrados para user ID: {usuario.id}")
     
+    if request.method == 'POST':
+        form = ClienteProfileForm(request.POST, request.FILES, instance=usuario)
+        if form.is_valid():
+            form.save()
+            logger.info(f"Perfil atualizado para: {usuario.email}")
+            messages.success(request, "✅ Perfil atualizado com sucesso!")
+            return redirect('perfil_usuario')
+        else:
+            logger.warning(f"Erro ao atualizar perfil para: {usuario.email} - Erros: {form.errors}")
+            messages.error(request, "❌ Erro ao atualizar perfil. Verifique os dados.")
+    else:
+        form = ClienteProfileForm(instance=usuario)
+    
     context = {
         'usuario': usuario,
         'dados_adicionais': dados_adicionais,
         'tipo_cliente': usuario.tipo_cliente,
+        'form': form,
     }
     
     return render(request, 'perfil_usuario.html', context)
@@ -511,11 +529,17 @@ def ver_carrinho(request):
         carrinho = None
         itens = []
     
+    # Obter categorias com contagem de produtos
+    categorias = Categoria.objects.filter(ativa=True).annotate(
+        total_produtos=Count('produtos')
+    ).order_by('nome')
+    
     context = {
         'carrinho': carrinho,
         'itens': itens,
         'total_itens': sum(item.quantidade for item in itens),
         'total_preco': sum(item.subtotal() for item in itens),
+        'categorias': categorias,
     }
     
     return render(request, 'carrinho.html', context)

@@ -11,9 +11,18 @@ class Cliente(AbstractUser):
         ('pj', 'Pessoa Jurídica'),
     )
     tipo_cliente = models.CharField(max_length=2, choices=TIPO_CLIENTE, default='pf')
+    foto_perfil = models.ImageField(upload_to='perfil/', blank=True, null=True, help_text='Foto de perfil do usuário (máx 5MB)')
+    criado_em = models.DateTimeField(auto_now_add=True, null=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.username} ({self.get_tipo_cliente_display()})"
+
+    def obter_foto_perfil(self):
+        """Retorna URL da foto de perfil ou imagem padrão"""
+        if self.foto_perfil:
+            return self.foto_perfil.url
+        return '/static/images/default_avatar.png'
 
 
 class PessoaFisica(models.Model):

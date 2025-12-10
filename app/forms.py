@@ -133,6 +133,50 @@ class PessoaFisicaForm(forms.ModelForm):
         return cleaned_data
 
 
+class ClienteProfileForm(forms.ModelForm):
+    """Formulário para atualização de perfil do cliente"""
+    
+    class Meta:
+        model = Cliente
+        fields = ['first_name', 'last_name', 'foto_perfil']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Primeiro nome',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Sobrenome',
+            }),
+            'foto_perfil': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*',
+                'help_text': 'Formatos aceitos: JPG, PNG, GIF (máx 5MB)',
+            }),
+        }
+        labels = {
+            'first_name': 'Primeiro Nome',
+            'last_name': 'Sobrenome',
+            'foto_perfil': 'Foto de Perfil',
+        }
+    
+    def clean_foto_perfil(self):
+        """Validar tamanho e tipo de arquivo da foto"""
+        foto = self.cleaned_data.get('foto_perfil')
+        
+        if foto:
+            # Validar tamanho máximo de 5MB
+            if foto.size > 5 * 1024 * 1024:
+                raise forms.ValidationError('O arquivo de imagem não pode ter mais de 5MB.')
+            
+            # Validar extensão
+            allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+            file_name = foto.name.lower()
+            if not any(file_name.endswith(ext) for ext in allowed_extensions):
+                raise forms.ValidationError('Formato de arquivo não permitido. Use JPG, PNG ou GIF.')
+        
+        return foto
+
 class EnderecoForm(forms.Form):
     """Formulário reutilizável para endereço"""
     cep = forms.CharField(

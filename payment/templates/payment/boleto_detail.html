@@ -1,0 +1,365 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boleto Bancário - Minha Loja</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #16a34a;
+            --primary-dark: #15803d;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container-payment {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-payment {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-payment h1 {
+            color: var(--text-dark);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header-payment p {
+            color: var(--text-light);
+        }
+
+        .success-icon {
+            color: #10b981;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .boleto-box {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            background: #f9fafb;
+            text-align: center;
+        }
+
+        .boleto-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .codigo-barras {
+            font-family: monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            word-break: break-all;
+            line-height: 1.8;
+        }
+
+        .linha-digitavel {
+            font-family: monospace;
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(22, 163, 74, 0.3);
+        }
+
+        .info-section {
+            background: #f0fdf4;
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+            border-top: 1px solid rgba(22, 163, 74, 0.2);
+            padding-top: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .info-label {
+            color: var(--text-light);
+        }
+
+        .info-value {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .warning-box {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #92400e;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .warning-box i {
+            color: #d97706;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .instructions {
+            background: #dbeafe;
+            border-left: 4px solid #0284c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #0c4a6e;
+        }
+
+        .instructions h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+            color: #075985;
+        }
+
+        .instructions ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-secondary-custom {
+            background: #f3f4f6;
+            color: var(--primary-color);
+            padding: 12px 25px;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary-custom:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .card-container {
+                padding: 25px;
+            }
+
+            .header-payment h1 {
+                font-size: 1.5rem;
+            }
+
+            .codigo-barras {
+                font-size: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .button-group {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-payment">
+        <!-- Header -->
+        <div class="header-payment">
+            <span class="success-icon"><i class="fas fa-check-circle"></i></span>
+            <h1>Boleto Gerado com Sucesso!</h1>
+            <p>Guarde as informações abaixo para efetuar o pagamento</p>
+        </div>
+
+        <!-- Container Principal -->
+        <div class="card-container">
+            <!-- Informações do Boleto -->
+            <div class="info-section">
+                <div class="info-row">
+                    <span class="info-label">Número do Boleto:</span>
+                    <span class="info-value">{{ boleto.numero_boleto }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Banco:</span>
+                    <span class="info-value">{{ boleto.banco }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Data de Vencimento:</span>
+                    <span class="info-value">{{ boleto.data_vencimento|date:"d/m/Y" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Valor:</span>
+                    <span class="info-value">{{ valor_formatado }}</span>
+                </div>
+            </div>
+
+            <!-- Código de Barras -->
+            <div class="boleto-box">
+                <div class="boleto-label">Código de Barras</div>
+                <div class="codigo-barras" id="codigo-barras-display">
+                    {{ boleto.codigo_barras }}
+                </div>
+                <button type="button" class="copy-btn" onclick="copiar('codigo-barras-display')">
+                    <i class="fas fa-copy"></i> Copiar Código
+                </button>
+            </div>
+
+            <!-- Linha Digitável -->
+            <div class="boleto-box">
+                <div class="boleto-label">Linha Digitável</div>
+                <div class="linha-digitavel" id="linha-digitavel-display">
+                    {{ boleto.linha_digitavel }}
+                </div>
+                <button type="button" class="copy-btn" onclick="copiar('linha-digitavel-display')">
+                    <i class="fas fa-copy"></i> Copiar Linha
+                </button>
+            </div>
+
+            <!-- Instruções de Pagamento -->
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Como Pagar:</h3>
+                <ol>
+                    <li>Acesse o site ou app do seu banco</li>
+                    <li>Escolha a opção "Pagar com Código de Barras" ou similar</li>
+                    <li>Digite o código de barras ou a linha digitável acima</li>
+                    <li>Verifique os dados e confirme o pagamento</li>
+                    <li>Guarde o comprovante para sua segurança</li>
+                </ol>
+            </div>
+
+            <!-- Aviso Importante -->
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Atenção:</strong> O boleto vence em {{ boleto.data_vencimento|date:"d/m/Y" }}. 
+                Após a data de vencimento, o código não será mais válido. Sua compra será confirmada 
+                assim que recebermos a confirmação do pagamento do banco.
+            </div>
+
+            <!-- Botões -->
+            <div class="button-group">
+                <button type="button" class="btn-primary-custom" onclick="window.print()">
+                    <i class="fas fa-print"></i> Imprimir Boleto
+                </button>
+                <a href="{% url 'catalogo_produtos' %}" class="btn-secondary-custom">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copiar(elementId) {
+            const elemento = document.getElementById(elementId);
+            const texto = elemento.textContent.trim();
+            
+            navigator.clipboard.writeText(texto).then(() => {
+                alert('Copiado com sucesso!');
+            }).catch(() => {
+                alert('Erro ao copiar. Tente novamente.');
+            });
+        }
+    </script>
+</body>
+</html>
